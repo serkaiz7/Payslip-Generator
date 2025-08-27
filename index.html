@@ -1,413 +1,68 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payslip Generator</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --ink:#222;
-      --muted:#6b7280;
-      --line:#d1d5db;
-      --accent:#0ea5e9;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; background:#f3f4f6; color:var(--ink);
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    .app{max-width:1100px; margin:24px auto; padding:20px}
-    .toolbar{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px}
-    button{
-      appearance:none; border:1px solid #cbd5e1; background:white; color:#0f172a;
-      padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600;
-      transition: transform .05s ease, box-shadow .2s ease, border-color .2s ease;
-      box-shadow: 0 1px 0 rgba(0,0,0,.06);
-    }
-    button:hover{border-color:#94a3b8}
-    button:active{transform:translateY(1px)}
-    .primary{background:var(--accent); color:white; border-color:transparent}
-    .muted{color:#334155; background:#eef2ff; border-color:#c7d2fe}/* Canvas (A4) */
-.sheet{
-  width: 210mm; min-height: 297mm; margin:0 auto; background:white;
-  border:1px solid #e5e7eb; border-radius:16px; padding:22mm 18mm; position:relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,.08);
-}
-.grid{display:grid; grid-template-columns: 1fr 1fr; gap:16px}
-.row{display:flex; gap:12px; align-items:center}
-.hstack{display:flex; gap:10px; align-items:center}
-.split{display:grid; grid-template-columns: 1fr 1fr; gap:28px}
-.title{font-weight:800; letter-spacing:.08em; font-size:28px}
-.subtitle{color:var(--muted); font-weight:600; font-size:12px}
-.section-title{font-size:13px; font-weight:700; letter-spacing:.04em; margin:14px 0 8px}
-.hr{height:1px; background:var(--line); margin:12px 0}
-
-/* Inputs as underlined fields */
-label{font-size:12px; color:#374151; display:block; margin-bottom:6px; font-weight:600}
-input[type="text"], input[type="number"], input[type="date"]{
-  width:100%; border:none; border-bottom:1.6px solid var(--line);
-  padding:6px 0; background:transparent; font-size:13px; color:var(--ink);
-  outline:none; transition:border-color .2s ease;
-}
-input[type="number"]{ -moz-appearance: textfield; }
-input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
-input:focus{border-bottom-color:var(--accent)}
-.right{text-align:right}
-.mono{font-variant-numeric: tabular-nums; font-feature-settings: "tnum" on}
-.box{
-  border:1px solid var(--line); border-radius:14px; padding:14px 16px;
-  background:#fbfbfb;
-}
-.totals{
-  margin-top:10px; display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center
-}
-.big{
-  font-size:18px; font-weight:800
-}
-/* Logo */
-.logo{width:72px; height:72px; border-radius:12px; object-fit:contain; background:#f8fafc; border:1px solid #e2e8f0}
-
-/* Print */
-@media print{
-  body{background:white}
-  .app{padding:0; margin:0}
-  .toolbar{display:none}
-  .sheet{border:none; border-radius:0; box-shadow:none; width:auto; min-height:auto; padding:14mm 12mm}
-  input{border-bottom-color:#94a3b8}
-  .box{background:white}
-}
-
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
-    <div class="toolbar">
-      <input id="logoInput" type="file" accept="image/*" />
-      <button id="downloadBtn" class="primary">Save as PNG</button>
-      <button id="printBtn">Print</button>
-      <button id="clearBtn" class="muted">Clear All</button>
-    </div><!-- ===== Payslip A4 ===== -->
-<div id="slip" class="sheet" aria-label="Payslip">
-  <!-- Header -->
-  <div class="grid" style="align-items:center; margin-bottom:6px">
-    <div class="hstack">
-      <img id="logo" class="logo" alt="Company Logo" />
-      <div>
-        <div class="title">PAYSLIP</div>
-        <div class="subtitle">Professional printable payslip</div>
+  <div class="container" id="payslip">
+    <header>
+      <img id="logo" src="" alt="Company Logo">
+      <h1 id="companyName">Far East Refrigeration and Airconditioning System Trading</h1>
+    </header>
+
+    <section class="details">
+      <label>Date: <input type="date" id="date"></label>
+      <label>Period: <input type="text" id="period"></label>
+    </section>
+
+    <section class="employee">
+      <label>Employee Name: <input type="text" id="employeeName" value="Juan Dela Cruz"></label>
+      <label>Position: <input type="text" id="position" value="Technician"></label>
+      <label>ID Number: <input type="text" id="idNumber" value="00125"></label>
+    </section>
+
+    <section class="earnings">
+      <h2>Earnings</h2>
+      <label>Basic Pay (per day): <input type="number" id="basicRate" value="1250"> × <input type="number" id="basicDays" value="12"> = <span id="basicTotal">0</span></label>
+      <label>Overtime (per hour): <input type="number" id="otRate" value="120"> × <input type="number" id="otHours" value="10"> = <span id="otTotal">0</span></label>
+      <label>Holiday Pay (per day): <input type="number" id="holidayRate" value="500"> × <input type="number" id="holidayDays" value="1"> = <span id="holidayTotal">0</span></label>
+      <label>Others: <input type="number" id="otherEarnings" value="1000"> = <span id="otherTotal">0</span></label>
+      <p>Total Earnings: <span id="totalEarnings">0</span></p>
+    </section>
+
+    <section class="deductions">
+      <h2>Deductions</h2>
+      <label>SSS: <input type="number" id="sss" value="600"></label>
+      <label>PhilHealth: <input type="number" id="philhealth" value="400"></label>
+      <label>Pag-IBIG: <input type="number" id="pagibig" value="200"></label>
+      <label>Tax: <input type="number" id="tax" value="1000"></label>
+      <label>Loan: <input type="number" id="loan" value="500"></label>
+      <p>Total Deductions: <span id="totalDeductions">0</span></p>
+    </section>
+
+    <section class="net">
+      <h2>Net Pay: <span id="netPay">0</span></h2>
+    </section>
+
+    <footer>
+      <p>I agree with the above salary computation and acknowledge receipt.</p>
+      <div class="signatures">
+        <span>Authorized Signatory: __________</span>
+        <span>Employee Signature: __________</span>
       </div>
-    </div>
-    <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px">
-      <div>
-        <label>Date</label>
-        <input id="date" type="date" />
-      </div>
-      <div>
-        <label>For the Period Of</label>
-        <input id="period" type="text" placeholder="Aug 1 – Aug 15, 2025" />
-      </div>
-    </div>
+    </footer>
   </div>
 
-  <div class="hr"></div>
-
-  <!-- Company block -->
-  <div class="grid" style="grid-template-columns:2fr 1fr; gap:18px; margin-bottom:6px">
-    <div>
-      <label>Company Name</label>
-      <input id="company" type="text" value="FAR EAST REFRIGERATION AND AIRCONDITIONING SYSTEM TRADING" />
-      <label style="margin-top:10px">Address</label>
-      <input id="address" type="text" value="PRK. PAG-ASA-2, Kalawag II, Isulan, Sultan Kudarat" />
-    </div>
-    <div>
-      <label>Business Permit No.</label>
-      <input id="permit" type="text" value="2024-1206504000-0784" />
-    </div>
+  <div class="controls">
+    <label>Upload Logo: <input type="file" id="logoUpload" accept="image/*"></label>
+    <button onclick="saveAsImage()">Save as PNG</button>
+    <button onclick="window.print()">Print</button>
+    <button onclick="clearAll()">Clear All</button>
   </div>
 
-  <div class="hr"></div>
-
-  <!-- Employee block -->
-  <div class="grid" style="grid-template-columns:2fr 1fr 1fr; gap:16px">
-    <div>
-      <label>Employee Name</label>
-      <input id="empName" type="text" value="Juan Dela Cruz" />
-    </div>
-    <div>
-      <label>Position</label>
-      <input id="position" type="text" value="Technician" />
-    </div>
-    <div>
-      <label>ID Number</label>
-      <input id="empId" type="text" value="00125" />
-    </div>
-  </div>
-
-  <!-- Earnings & Deductions -->
-  <div class="split" style="margin-top:18px">
-    <!-- Earnings -->
-    <div class="box">
-      <div class="section-title">EARNINGS</div>
-      <div class="grid" style="grid-template-columns: 1.2fr .3fr .7fr .1fr 1fr; gap:10px; align-items:end">
-        <div>
-          <label>Basic Pay (days)</label>
-          <input id="basicQty" type="number" min="0" step="1" value="12" />
-        </div>
-        <div class="right" style="align-self:end">×</div>
-        <div>
-          <label>Rate / Day</label>
-          <input id="basicRate" type="number" min="0" step="0.01" value="1250" />
-        </div>
-        <div class="right" style="align-self:end">=</div>
-        <div>
-          <label>Amount</label>
-          <input id="basicAmt" class="mono right" type="text" value="15000.00" readonly />
-        </div>
-
-        <div>
-          <label>Overtime (hours)</label>
-          <input id="otQty" type="number" min="0" step="1" value="10" />
-        </div>
-        <div class="right">×</div>
-        <div>
-          <label>Rate / Hour</label>
-          <input id="otRate" type="number" min="0" step="0.01" value="120" />
-        </div>
-        <div class="right">=</div>
-        <div>
-          <label>Amount</label>
-          <input id="otAmt" class="mono right" type="text" value="1200.00" readonly />
-        </div>
-
-        <div>
-          <label>Holiday (days)</label>
-          <input id="holQty" type="number" min="0" step="1" value="1" />
-        </div>
-        <div class="right">×</div>
-        <div>
-          <label>Rate</label>
-          <input id="holRate" type="number" min="0" step="0.01" value="500" />
-        </div>
-        <div class="right">=</div>
-        <div>
-          <label>Amount</label>
-          <input id="holAmt" class="mono right" type="text" value="500.00" readonly />
-        </div>
-
-        <div>
-          <label>Others (desc)</label>
-          <input id="othDesc" type="text" value="Allowance" />
-        </div>
-        <div></div><div></div><div></div>
-        <div>
-          <label>Amount</label>
-          <input id="othAmt" class="mono right" type="number" step="0.01" value="1000" />
-        </div>
-      </div>
-
-      <div class="totals">
-        <div style="text-align:right; font-weight:700">TOTAL AMOUNT</div>
-        <div><input id="earnTotal" class="mono right big" type="text" value="17700.00" readonly></div>
-      </div>
-    </div>
-
-    <!-- Deductions -->
-    <div class="box">
-      <div class="section-title">LESS DEDUCTIONS</div>
-      <div class="grid" style="grid-template-columns: 1fr 1fr; gap:12px">
-        <div>
-          <label>Cash Advances</label>
-          <input id="adv" class="right mono" type="number" step="0.01" value="0" />
-        </div>
-        <div></div>
-        <div>
-          <label>Late / Undertime (hours)</label>
-          <input id="lateQty" type="number" min="0" step="1" value="0" />
-        </div>
-        <div>
-          <label>Rate / Hour</label>
-          <input id="lateRate" type="number" min="0" step="0.01" value="0" />
-        </div>
-        <div>
-          <label>Absences (days)</label>
-          <input id="absQty" type="number" min="0" step="1" value="0" />
-        </div>
-        <div>
-          <label>Rate / Day</label>
-          <input id="absRate" type="number" min="0" step="0.01" value="0" />
-        </div>
-        <div>
-          <label>SSS</label>
-          <input id="sss" class="right mono" type="number" step="0.01" value="600" />
-        </div>
-        <div>
-          <label>PhilHealth</label>
-          <input id="ph" class="right mono" type="number" step="0.01" value="400" />
-        </div>
-        <div>
-          <label>Pag-IBIG</label>
-          <input id="pi" class="right mono" type="number" step="0.01" value="200" />
-        </div>
-        <div>
-          <label>Tax</label>
-          <input id="tax" class="right mono" type="number" step="0.01" value="1000" />
-        </div>
-        <div>
-          <label>Loan</label>
-          <input id="loan" class="right mono" type="number" step="0.01" value="500" />
-        </div>
-        <div>
-          <label>Other Deductions</label>
-          <input id="dedOther" class="right mono" type="number" step="0.01" value="0" />
-        </div>
-      </div>
-
-      <div class="totals">
-        <div style="text-align:right; font-weight:700">TOTAL DEDUCTION</div>
-        <div><input id="dedTotal" class="mono right big" type="text" value="2700.00" readonly></div>
-      </div>
-
-      <div class="totals" style="margin-top:18px">
-        <div style="text-align:right; font-weight:800; font-size:20px">NET PAY</div>
-        <div><input id="netPay" class="mono right big" type="text" value="15000.00" readonly></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Acknowledgement & signatures -->
-  <div style="margin-top:22px; text-align:center; color:var(--muted); font-size:12px">
-    I AGREE WITH THE ABOVE SALARY COMPUTATION AND ACKNOWLEDGE RECEIPT
-  </div>
-  <div class="grid" style="grid-template-columns: 1fr 1fr; gap:40px; margin-top:24px">
-    <div>
-      <div class="hr"></div>
-      <div class="subtitle">AUTHORIZED SIGNATORY</div>
-    </div>
-    <div>
-      <div class="hr"></div>
-      <div class="subtitle">EMPLOYEE SIGNATURE</div>
-    </div>
-  </div>
-</div>
-
-  </div>  <!-- html2canvas for PNG export -->  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>  <script>
-    const $ = (id)=>document.getElementById(id);
-
-    const fields = [
-      'basicQty','basicRate','otQty','otRate','holQty','holRate','othAmt',
-      'adv','lateQty','lateRate','absQty','absRate','sss','ph','pi','tax','loan','dedOther'
-    ];
-
-    function peso(n){ return (Number(n)||0).toFixed(2); }
-
-    function compute(){
-      // Earnings
-      const basic = $('basicQty').value * $('basicRate').value;
-      const ot    = $('otQty').value    * $('otRate').value;
-      const hol   = $('holQty').value   * $('holRate').value;
-      const oth   = Number($('othAmt').value)||0;
-      $('basicAmt').value = peso(basic);
-      $('otAmt').value    = peso(ot);
-      $('holAmt').value   = peso(hol);
-      const earnTotal = basic + ot + hol + oth;
-      $('earnTotal').value = peso(earnTotal);
-
-      // Deductions
-      const late = $('lateQty').value * $('lateRate').value;
-      const abs  = $('absQty').value  * $('absRate').value;
-      const dedTotal = late + abs +
-        Number($('adv').value||0) + Number($('sss').value||0) + Number($('ph').value||0) +
-        Number($('pi').value||0) + Number($('tax').value||0) + Number($('loan').value||0) +
-        Number($('dedOther').value||0);
-      $('dedTotal').value = peso(dedTotal);
-
-      // Net Pay
-      $('netPay').value = peso(earnTotal - dedTotal);
-
-      // Persist to localStorage
-      const storeKeys = [
-        'company','address','permit','empName','position','empId','date','period','othDesc'
-      ].concat(fields);
-      const payload = {};
-      storeKeys.forEach(k=>payload[k] = $(k)?.value ?? null);
-      localStorage.setItem('payslip-data', JSON.stringify(payload));
-    }
-
-    // Bind events
-    fields.forEach(id=> $(id).addEventListener('input', compute));
-    ;['company','address','permit','empName','position','empId','date','period','othDesc'].forEach(id=>{
-      $(id).addEventListener('input', compute);
-    });
-
-    // Restore saved data if available
-    (()=>{
-      const saved = localStorage.getItem('payslip-data');
-      if(!saved) { compute(); return; }
-      try{
-        const data = JSON.parse(saved);
-        Object.entries(data).forEach(([k,v])=>{ if($(k) && v!==null) $(k).value = v; });
-      }catch(e){}
-      compute();
-    })();
-
-    // Logo upload preview + persist in localStorage as dataURL
-    const logoInput = $('logoInput');
-    const logoImg = $('logo');
-    const savedLogo = localStorage.getItem('payslip-logo');
-    if(savedLogo){ logoImg.src = savedLogo; }
-    logoInput.addEventListener('change', (e)=>{
-      const file = e.target.files[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = ev=>{
-        logoImg.src = ev.target.result;
-        localStorage.setItem('payslip-logo', ev.target.result);
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // Save as PNG
-    $('downloadBtn').addEventListener('click', async ()=>{
-      const slip = $('slip');
-      const canvas = await html2canvas(slip, {scale:2, background:'#ffffff'});
-      const link = document.createElement('a');
-      const dt = new Date();
-      const y = dt.getFullYear();
-      const m = String(dt.getMonth()+1).padStart(2,'0');
-      const d = String(dt.getDate()).padStart(2,'0');
-      link.download = `payslip_${y}-${m}-${d}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    });
-
-    // Print
-    $('printBtn').addEventListener('click', ()=> window.print());
-
-    // Clear all
-    $('clearBtn').addEventListener('click', ()=>{
-      localStorage.removeItem('payslip-data');
-      localStorage.removeItem('payslip-logo');
-      document.querySelectorAll('input').forEach(i=>{
-        if(i.type==='text' || i.type==='date') i.value='';
-        if(i.type==='number') i.value = 0;
-      });
-      // restore example defaults
-      $('company').value = 'FAR EAST REFRIGERATION AND AIRCONDITIONING SYSTEM TRADING';
-      $('address').value = 'PRK. PAG-ASA-2, Kalawag II, Isulan, Sultan Kudarat';
-      $('permit').value = '2024-1206504000-0784';
-      $('empName').value = 'Juan Dela Cruz';
-      $('position').value = 'Technician';
-      $('empId').value = '00125';
-      $('basicQty').value = 12; $('basicRate').value = 1250;
-      $('otQty').value = 10; $('otRate').value = 120;
-      $('holQty').value = 1; $('holRate').value = 500;
-      $('othDesc').value = 'Allowance'; $('othAmt').value = 1000;
-      $('sss').value = 600; $('ph').value = 400; $('pi').value = 200; $('tax').value = 1000; $('loan').value = 500;
-      $('logo').src = '';
-      compute();
-    });
-  </script></body>
+  <script src="script.js"></script>
+</body>
 </html>
