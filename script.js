@@ -56,7 +56,7 @@ function clearAll() {
   calculate();
 }
 
-// Duplicate payslip for printing
+// Duplicate payslip for printing (4 copies)
 function preparePrint() {
   let payslip = document.getElementById("payslip").outerHTML;
   let printArea = document.getElementById("printArea");
