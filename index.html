@@ -7,8 +7,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Single Editable Payslip -->
-  <div class="payslip" id="payslip">
+  <div class="container" id="payslip">
     <header>
       <img id="logo" src="" alt="Company Logo">
       <h1 id="companyName">Far East Refrigeration and Airconditioning System Trading</h1>
@@ -57,16 +56,12 @@
     </footer>
   </div>
 
-  <!-- Controls (not printed) -->
   <div class="controls">
     <label>Upload Logo: <input type="file" id="logoUpload" accept="image/*"></label>
     <button onclick="saveAsImage()">Save as PNG</button>
     <button onclick="window.print()">Print</button>
     <button onclick="clearAll()">Clear All</button>
   </div>
-
-  <!-- Hidden Print Area -->
-  <div id="printArea"></div>
 
   <script src="script.js"></script>
 </body>
