@@ -56,22 +56,12 @@ function clearAll() {
   calculate();
 }
 
-// Duplicate payslip for printing (4 copies)
-function preparePrint() {
-  let payslip = document.getElementById("payslip").outerHTML;
-  let printArea = document.getElementById("printArea");
-  printArea.innerHTML = payslip + payslip + payslip + payslip;
-}
-
 // Load html2canvas dynamically
 (function loadScript() {
   let script = document.createElement("script");
   script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
   document.body.appendChild(script);
 })();
-
-// Hook into print
-window.onbeforeprint = preparePrint;
 
 // Initialize first calculation
 window.onload = calculate;
