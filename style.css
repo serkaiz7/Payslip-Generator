@@ -1,128 +1,84 @@
 body {
   font-family: Arial, sans-serif;
-  background: #f9f9f9;
   margin: 20px;
+  background: #f9f9f9;
 }
 
-.payslip {
+.container {
   background: white;
-  border: 1px solid black;
-  padding: 10px;
-  width: 100%;
+  padding: 20px;
   max-width: 800px;
   margin: auto;
-  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
 }
 
 header {
   text-align: center;
-  border-bottom: 1px solid black;
-  padding-bottom: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 header img {
-  max-height: 50px;
+  max-height: 80px;
   display: block;
   margin: auto;
 }
 
 h1 {
-  font-size: 14px;
-  margin: 5px 0;
+  font-size: 22px;
+  margin: 10px 0;
 }
 
 section {
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 h2 {
-  font-size: 13px;
-  margin-bottom: 2px;
-  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
 label {
   display: block;
-  font-size: 12px;
-  margin: 2px 0;
+  margin: 5px 0;
 }
 
 label input {
-  margin-left: 5px;
-  font-size: 12px;
-  padding: 2px;
+  margin-left: 10px;
+  padding: 4px;
 }
 
 p {
-  font-size: 12px;
   font-weight: bold;
 }
 
 footer {
-  font-size: 11px;
-  margin-top: 5px;
   text-align: center;
-  border-top: 1px solid black;
-  padding-top: 3px;
+  margin-top: 20px;
 }
 
 .signatures {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
-  margin-top: 3px;
+  margin-top: 10px;
 }
 
 .controls {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 button {
   margin: 5px;
-  padding: 6px 12px;
+  padding: 8px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   background: #007bff;
   color: white;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 button:hover {
   background: #0056b3;
-}
-
-/* ✅ Print: 4 exact quarter A4 slips */
-@media print {
-  body {
-    background: white;
-    margin: 0;
-  }
-
-  .controls,
-  #payslip {
-    display: none !important;
-  }
-
-  #printArea {
-    display: grid;
-    grid-template-columns: 105mm 105mm;
-    grid-template-rows: 148.5mm 148.5mm;
-    width: 210mm;
-    height: 297mm;
-    margin: 0;
-    padding: 0;
-  }
-
-  #printArea .payslip {
-    width: 105mm;
-    height: 148.5mm;
-    margin: 0;
-    padding: 8px;
-    box-sizing: border-box;
-    border: 1px solid black;
-    page-break-inside: avoid;
-  }
 }
